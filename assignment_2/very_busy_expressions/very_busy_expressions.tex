@@ -1,0 +1,81 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage[margin=1cm, top=1cm]{geometry}
+\usepackage{graphicx}
+\usepackage{makecell}
+\pagenumbering{gobble}
+
+\usepackage{titlesec}
+\titleformat{\section}{\LARGE\bfseries}{\thesection}{1em}{}
+
+\title{\Huge{Very Busy Expressions}}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section{Parametri}
+	
+	\begin{table}[h]
+		\centering
+		\Large
+		\renewcommand{\arraystretch}{1.4}
+		\begin{tabular}{|c|c|}
+			\hline
+			Domain &  Insieme delle espressioni \\
+			\hline
+			Direction &  \makecell[l]{Backward: \\ $in[B] = f_B(out[B])$ \\ $out[B] = \wedge\ in[succ(B)]$} \\
+			\hline
+			Transfer Function &  $f_B(x)$ = $Gen_B \cup (x - Kill_B)$ \\
+			\hline
+			Meet Operation ($\wedge$) &  Intersezione ($\cap$) \\
+			\hline
+			Boundary Condition &  $in[EXIT] = \emptyset$ \\
+			\hline
+			Initial interior points &  $in[B] = U$ \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\vspace{1cm}
+	
+	\section{Iterazioni}
+	
+	\begin{table}[h]
+		\centering
+		\Large
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			& \multicolumn{2}{c|}{\textbf{Iterazione 1}} & \multicolumn{2}{c|}{\textbf{Iterazione 2}} & \multicolumn{2}{c|}{\textbf{Iterazione 3}} \\
+			\hline
+			& IN[B] & OUT[B] & IN[B] & OUT[B] & IN[B] & OUT[B] \\
+			\hline
+			BB1 & $\{b-a\}$ & $\{b-a\}$ & $\{b-a\}$ & $\{b-a\}$ & $\{b-a\}$ & $\{b-a\}$ \\
+			\hline
+			BB2 & $\{b-a\}$ & $\{b-a\}$ & $\{b-a\}$ & $\{b-a\}$ & $\{b-a\}$ & $\{b-a\}$ \\
+			\hline
+			BB3 & $\{a-b, b-a\}$ & $\{a-b\}$ & $\{a-b, b-a\}$ & $\{a-b\}$ & $\{a-b, b-a\}$ & $\{a-b\}$ \\
+			\hline
+			BB4 & $\{a-b\}$ & $\emptyset$ & $\{a-b\}$ & $\emptyset$ & $\{a-b\}$ & $\emptyset$ \\
+			\hline
+			BB5 & $\{b-a\}$ & $\emptyset$ & $\{b-a\}$ & $\emptyset$ & $\{b-a\}$ & $\emptyset$ \\
+			\hline
+			BB6 & $\emptyset$ & $\{a-b\}$ & $\emptyset$ & $\{a-b\}$ & $\emptyset$ & $\{a-b\}$ \\
+			\hline
+			BB7 & $\{a-b\}$ & $\emptyset$ & $\{a-b\}$ & $\emptyset$ & $\{a-b\}$ & $\emptyset$ \\
+			\hline
+			BB8 & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+	\begin{figure}[h]
+		\centering
+		\includegraphics[height=12cm]{img/CFG.png}
+		\caption{CFG}
+	\end{figure}
+	
+\end{document}

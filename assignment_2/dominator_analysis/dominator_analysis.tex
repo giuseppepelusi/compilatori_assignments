@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage[margin=1cm, top=1cm]{geometry}
+\usepackage{graphicx}
+\usepackage{makecell}
+\pagenumbering{gobble}
+
+\usepackage{titlesec}
+\titleformat{\section}{\LARGE\bfseries}{\thesection}{1em}{}
+
+\title{\Huge{Dominator Analysis}}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section{Parametri}
+	
+	\begin{table}[h]
+		\centering
+		\Large
+		\renewcommand{\arraystretch}{1.4}
+		\begin{tabular}{|c|c|}
+			\hline
+			Domain &  Insieme dei nodi \\
+			\hline
+			Direction & \makecell[l]{Forward: \\ $out[B] = f_B(in[B])$ \\ $in[B] = \wedge\ out[pred(B)]$} \\
+			\hline
+			Transfer Function &  $f_B(x)$ = $Gen_B \cup x$ \\
+			\hline
+			Meet Operation ($\wedge$) & Intersezione ($\cap$) \\
+			\hline
+			Boundary Condition & $out[EXIT] = \emptyset$ \\
+			\hline
+			Initial interior points & $out[B] = N$ \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\vspace{1cm}
+	
+	\section{Iterazioni}
+	
+	\begin{table}[h]
+		\centering
+		\Large
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			& \multicolumn{2}{c|}{\textbf{Iterazione 1}} & \multicolumn{2}{c|}{\textbf{Iterazione 2}} & \multicolumn{2}{c|}{\textbf{Iterazione 3}} \\
+			\hline
+			& IN[B] & OUT[B] & IN[B] & OUT[B] & IN[B] & OUT[B] \\
+			\hline
+			A & $\emptyset$ & \{A\} & $\emptyset$ & \{A\} & $\emptyset$ & \{A\} \\
+			\hline
+			B & \{A\} & \{A, B\} & \{A\} & \{A, B\} & \{A\} & \{A, B\} \\
+			\hline
+			C & \{A\} & \{A, C\} & \{A\} & \{A, C\} & \{A\} & \{A, C\} \\
+			\hline
+			D & \{A, C\} & \{A, C, D\} & \{A, C\} & \{A, C, D\} & \{A, C\} & \{A, C, D\} \\
+			\hline
+			E & \{A, C\} & \{A, C, E\} & \{A, C\} & \{A, C, E\} & \{A, C\} & \{A, C, E\} \\
+			\hline
+			F & \{A, C\} & \{A, C, F\} & \{A, C\} & \{A, C, F\} & \{A, C\} & \{A, C, F\} \\
+			\hline
+			G & \{A\} & \{A, G\} & \{A\} & \{A, G\} & \{A\} & \{A, G\} \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+	\begin{figure}[h]
+	\centering
+	\includegraphics[height=12cm]{img/CFG.png}
+	\caption{CFG}
+	\end{figure}
+	
+\end{document}

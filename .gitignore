@@ -1,1 +1,8 @@
 **/build/
+
+# Latex
+**.log
+**.fls
+**.fdb_latexmk
+**.synctex.gz
+**.aux
