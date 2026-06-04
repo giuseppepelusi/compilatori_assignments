@@ -62,7 +62,7 @@ Move the instructions that successfully satisfy all requirements out of the loop
 `clang -S -O0 -emit-llvm -Xclang -disable-O0-optnone test/licm.c -o test/licm.ll`
 
 - Applying the optimization pass plugin to the LLVM IR  
-`opt -load-pass-plugin build/libLoopICMPass.so -passes="mem2reg,loop-icm-pass" -S test/licm.ll -o test/licm.optimized.ll`
+`opt -load-pass-plugin build/libLoopICMPass.so -passes="mem2reg,loop-simplify,loop-icm-pass" -S test/licm.ll -o test/licm.optimized.ll`
 
 ## Documentation   
 https://llvm.org/doxygen/index.html

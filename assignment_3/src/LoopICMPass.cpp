@@ -2,17 +2,18 @@
 #include "llvm/Passes/PassPlugin.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Analysis/LoopInfo.h"
+#include "llvm/Analysis/ValueTracking.h"
 #include "llvm/IR/Dominators.h"
-#include "llvm/IR/IRBuilder.h"
+#include "llvm/ADT/SmallPtrSet.h"
 
 using namespace llvm;
 
 namespace {
 
-	bool isLoopInvariant(Instruction *I, Loop *L) {
+	bool isLoopInvariant(Instruction *I, Loop *L, SmallPtrSetImpl<Instruction *> &ToHoistSet) {
 		for (Use &U : I->operands()) {
 			if (Instruction *OpDef = dyn_cast<Instruction>(U))
-				if (L->contains(OpDef->getParent()))
+				if (L->contains(OpDef->getParent()) && !ToHoistSet.count(OpDef))
 					return false;
 		}
 		return true;
@@ -35,7 +36,12 @@ namespace {
 			if (LI.empty())
 				return PreservedAnalyses::all();
 
-			for (Loop *L : LI.getLoopsInPreorder()) {
+			std::vector<Loop *> PostOrderLoops;
+			for (Loop *TopLevelLoop : LI) {
+				getLoopsPostorder(TopLevelLoop, PostOrderLoops);
+			}
+
+			for (Loop *L : PostOrderLoops) {
 				if (!L->isLoopSimplifyForm())
 					continue;
 
@@ -46,13 +52,17 @@ namespace {
 				L->getExitBlocks(ExitBlocks);
 
 				SmallVector<Instruction *, 16> ToHoist;
+				SmallPtrSet<Instruction *, 16> ToHoistSet;
 
 				for (BasicBlock *BB : L->blocks()) {
 					for (Instruction &I : *BB) {
 						if (I.isTerminator() || isa<PHINode>(I))
 							continue;
 
-						if (!isLoopInvariant(&I, L))
+						if (!isLoopInvariant(&I, L, ToHoistSet))
+							continue;
+
+						if (!isSafeToSpeculativelyExecute(&I))
 							continue;
 
 						bool dominatesAllExits = true;
@@ -91,6 +101,7 @@ namespace {
 						if (!dominatesAllUses) continue;
 
 						ToHoist.push_back(&I);
+						ToHoistSet.insert(&I);
 					}
 				}
 
